@@ -1,8 +1,8 @@
 import schema from './schema';
 import { handlerPath } from '@libs/handlerResolver';
 
-export default {
-  handler: `${handlerPath(__dirname)}/handler.main`,
+export const create = {
+  handler: `${handlerPath(__dirname)}/handler.createPlace`,
   events: [
     {
       http: {
@@ -17,3 +17,18 @@ export default {
     }
   ]
 }
+
+export const getById = {
+  handler: `${handlerPath(__dirname)}/handler.getPlaceById`,
+  events: [
+    {
+      http: {
+        method: 'get',
+        path: 'places/id/{placeId}',
+        resp: 'http'
+      }
+    }
+  ]
+}
+
+export default { create, getById }

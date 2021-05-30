@@ -21,3 +21,9 @@ export const formatCreateResponse = (id: string, resource: Record<string, unknow
   }
 }
 
+export const formatErrorResponse = (error: Record<string, unknown>) => {
+  return {
+    statusCode: 500,
+    body: JSON.stringify(error)
+  }
+}

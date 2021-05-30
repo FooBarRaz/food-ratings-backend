@@ -1,6 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 
 import places from '@functions/places';
+import dishes from '@functions/dishes';
 
 const serverlessConfiguration: AWS = {
   service: 'food-ratings',
@@ -44,7 +45,7 @@ const serverlessConfiguration: AWS = {
     ]
   },
   // import the function via paths
-  functions: { places },
+  functions: { ...places, ...dishes },
   resources: {
     Resources: {
       foodRatingsTable: {
