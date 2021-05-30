@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import hello from '@functions/hello';
+import places from '@functions/places';
 
 const serverlessConfiguration: AWS = {
   service: 'food-ratings',
@@ -23,9 +23,61 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
     },
     lambdaHashingVersion: '20201221',
+    iamRoleStatements: [
+      {
+        Effect: "Allow",
+        Action: [
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem"
+        ],
+        Resource: {
+          "Fn::GetAtt": [
+            "foodRatingsTable",
+            "Arn"
+          ]
+        }
+      }
+    ]
   },
   // import the function via paths
-  functions: { hello },
+  functions: { places },
+  resources: {
+    Resources: {
+      foodRatingsTable: {
+        Type: "AWS::DynamoDB::Table",
+        Properties: {
+          TableName: "foodRatings",
+          AttributeDefinitions: [
+            {
+              AttributeName: "partitionKey",
+              AttributeType: "S"
+            },
+            {
+              AttributeName: "sortKey",
+              AttributeType: "S"
+            }],
+          KeySchema: [
+            {
+              AttributeName: "partitionKey",
+              KeyType: "HASH"
+            },
+            {
+              AttributeName: "sortKey",
+              KeyType: "RANGE"
+            }
+          ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1
+          }
+        }
+      }
+    }
+  }
 };
 
 module.exports = serverlessConfiguration;
