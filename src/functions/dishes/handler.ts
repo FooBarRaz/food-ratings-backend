@@ -2,17 +2,19 @@ import 'source-map-support/register';
 import { v4 } from 'uuid';
 import { formatCreateResponse, formatErrorResponse, formatJSONResponse, ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-
 import schema from './schema';
 import { getById, put, query } from '@libs/dynamoDb';
-import { access } from 'fs';
-import { cursorTo } from 'readline';
+
+const partitionKey = 'menu';
+const sortKey = (placeId: string, dishId: string): string => {
+  return `places#${placeId}#dishes#${dishId}`;
+}
 
 const _create: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const { placeId } = event.pathParameters
   const { name, tags } = event.body;
   const id = v4();
-  return put({ name }, { partitionKey: 'places', sortKey: `#${placeId}#dishes#${id}` })
+  return put({ name }, { partitionKey, sortKey: sortKey(placeId, id) })
     .then(() => formatCreateResponse(id, { dishId: id, name, place: placeId, tags }))
     .catch(err => formatErrorResponse(err));
 }
@@ -20,7 +22,7 @@ const _create: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event)
 const _findById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const { placeId, dishId } = event.pathParameters;
 
-  return getById({ partitionKey: 'places', sortKey: `#${placeId}#dishes#${dishId}` })
+  return getById({ partitionKey, sortKey: sortKey(placeId, dishId) })
     .then((result: any) => {
       return formatJSONResponse(result)
     }).catch(err => {
@@ -30,9 +32,8 @@ const _findById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (even
 
 const _getDishInfo: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const { placeId, dishId } = event.pathParameters;
-  console.log(`fetching info for dish ${dishId} at ${placeId}`);
 
-  return query({ partitionKey: 'places', sortKey: `#${placeId}#dishes#${dishId}` })
+  return query({ partitionKey, sortKey: sortKey(placeId, dishId) })
     .then((result: Array<{ sortKey: string, data: any }>) => {
       // reduce all items to a single object
       return result
@@ -56,7 +57,7 @@ const _reviewDish: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (ev
   const id = v4();
   const review = event.body;
 
-  return put(review, { partitionKey: 'places', sortKey: `#${placeId}#dishes#${dishId}#reviews#${id}` })
+  return put(review, { partitionKey, sortKey: `${sortKey(placeId, dishId)}#reviews#${id}` })
     .then(() => {
       return formatCreateResponse(id, review as any)
     }).catch(err => {
@@ -68,3 +69,4 @@ export const create = middyfy(_create);
 export const findById = middyfy(_findById);
 export const getDishInfo = middyfy(_getDishInfo);
 export const reviewDish = middyfy(_reviewDish);
+

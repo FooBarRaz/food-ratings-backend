@@ -38,7 +38,6 @@ const getDishInfo = {
       http: {
         method: 'get',
         path: 'places/id/{placeId}/dishes/id/{dishId}',
-        resp: 'http'
       }
     }
   ]

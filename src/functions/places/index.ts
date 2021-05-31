@@ -1,5 +1,6 @@
 import schema from './schema';
 import { handlerPath } from '@libs/handlerResolver';
+import { httpAuthorization } from '@libs/apiGateway';
 
 export const create = {
   handler: `${handlerPath(__dirname)}/handler.createPlace`,
@@ -12,7 +13,8 @@ export const create = {
           schema: {
             'application/json': schema
           }
-        }
+        },
+        ...httpAuthorization
       }
     }
   ]
@@ -25,7 +27,6 @@ export const getById = {
       http: {
         method: 'get',
         path: 'places/id/{placeId}',
-        resp: 'http'
       }
     }
   ]

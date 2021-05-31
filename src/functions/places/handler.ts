@@ -25,6 +25,19 @@ const findById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event
     });
 }
 
+const findAll: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+  const { placeId } = event.pathParameters;
+
+  return getById({partitionKey: 'places', sortKey: placeId})
+    .then((result: any) => {
+      return formatJSONResponse(result)
+    }).catch(err => {
+      return formatErrorResponse(err);
+    });
+}
+
+
+
 
 export const createPlace = middyfy(create);
 export const getPlaceById = middyfy(findById);

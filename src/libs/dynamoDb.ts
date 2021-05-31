@@ -2,7 +2,7 @@ import * as AWS from 'aws-sdk';
 export const TABLE_NAME = 'foodRatings';
 
 export type Key = {
-    partitionKey: 'places' | 'dishes';
+    partitionKey: 'places' | 'menu' | 'dishes';
     sortKey: string;
 }
 

@@ -48,6 +48,57 @@ const serverlessConfiguration: AWS = {
   functions: { ...places, ...dishes },
   resources: {
     Resources: {
+      apiGatewayAuthorizer: {
+        DependsOn: [
+          "ApiGatewayRestApi"
+        ],
+        Type: "AWS::ApiGateway::Authorizer",
+        Properties: {
+          Name: "cognito-authorizer",
+          IdentitySource: "method.request.header.Authorization",
+          RestApiId: {
+            "Ref": "ApiGatewayRestApi"
+          },
+          Type: "COGNITO_USER_POOLS",
+          ProviderARNs: [
+            {
+              "Fn::GetAtt": [
+                "cognitoUserPool",
+                "Arn"
+              ]
+            }
+          ]
+        }
+      },
+      cognitoUserPool: {
+        Type: "AWS::Cognito::UserPool",
+        Properties: {
+          MfaConfiguration: "OFF",
+          UserPoolName: "food-ratings-user-pool",
+          UsernameAttributes: [
+            "email"
+          ],
+          Policies: {
+            PasswordPolicy: {
+              MinimumLength: 6,
+              RequireLowercase: true,
+              RequireNumbers: true,
+              RequireSymbols: false,
+              RequireUppercase: false
+            }
+          }
+        }
+      },
+      cognitoUserPoolClient: {
+        Type: "AWS::Cognito::UserPoolClient",
+        Properties: {
+          ClientName: "food-ratings-user-pool-client",
+          GenerateSecret: false,
+          UserPoolId: {
+            Ref: "cognitoUserPool"
+          }
+        }
+      },
       foodRatingsTable: {
         Type: "AWS::DynamoDB::Table",
         Properties: {
