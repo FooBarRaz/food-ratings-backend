@@ -2,7 +2,7 @@ import schema from './schema';
 import { handlerPath } from '@libs/handlerResolver';
 import { httpAuthorization } from '@libs/apiGateway';
 
-export const create = {
+const create = {
   handler: `${handlerPath(__dirname)}/handler.createPlace`,
   events: [
     {
@@ -20,7 +20,7 @@ export const create = {
   ]
 }
 
-export const getById = {
+const getById = {
   handler: `${handlerPath(__dirname)}/handler.getPlaceById`,
   events: [
     {
@@ -32,4 +32,16 @@ export const getById = {
   ]
 }
 
-export default { create, getById }
+const getAll = {
+  handler: `${handlerPath(__dirname)}/handler.getAllPlaces`,
+  events: [
+    {
+      http: {
+        method: 'get',
+        path: 'places',
+      }
+    }
+  ]
+}
+
+export default { create, getById, getAll }
