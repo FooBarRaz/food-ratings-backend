@@ -1,0 +1,356 @@
+{
+	"info": {
+		"_postman_id": "6cb0183c-7f65-4226-8899-700553a911a9",
+		"name": "Food Ratings",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Place",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('should have id in header', () => pm.response.to.have.header('Location'));\r",
+							"pm.test('should have status code 201', () => pm.response.to.have.status(201));\r",
+							"\r",
+							"pm.environment.set('place_id', pm.response.headers.get('Location'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"name\": \"Joey's Pizza Hole\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/places",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"places"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Dish",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('should have id in header', () => pm.response.to.have.header('Location'));\r",
+							"pm.test('should have status code 201', () => pm.response.to.have.status(201));\r",
+							"\r",
+							"pm.environment.set('dish_id', pm.response.headers.get('Location'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"name\": \"Joey's Special Pizza\", \"price\": \"20.01\", \"tags\": [\"pizza\", \"pepperoni\"] }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/places/id/{{place_id}}/dishes",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"places",
+						"id",
+						"{{place_id}}",
+						"dishes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Review Dish",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('should have id in header', () => pm.response.to.have.header('Location'));\r",
+							"pm.test('should have status code 201', () => pm.response.to.have.status(201));\r",
+							"\r",
+							"pm.environment.set('review_id', pm.response.headers.get('Location'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"rating\": 4.6,\r\n    \"comments\": \"pretty, pretty, pretty good\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/places/id/{{place_id}}/dishes/id/{{dish_id}}/reviews",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"places",
+						"id",
+						"{{place_id}}",
+						"dishes",
+						"id",
+						"{{dish_id}}",
+						"reviews"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Place",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// pm.test('should have id in header', () => pm.response.to.have.header('Location'));\r",
+							"// pm.test('should have status code 201', () => pm.response.to.have.status(201));\r",
+							"\r",
+							"// pm.environment.set('place_id', pm.response.headers.get('Location'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/places/id/{{place_id}}",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"places",
+						"id",
+						"{{place_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Places",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// pm.test('should have id in header', () => pm.response.to.have.header('Location'));\r",
+							"// pm.test('should have status code 201', () => pm.response.to.have.status(201));\r",
+							"\r",
+							"// pm.environment.set('place_id', pm.response.headers.get('Location'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/places/id/{{place_id}}",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"places",
+						"id",
+						"{{place_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Dish Info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// pm.test('should have id in header', () => pm.response.to.have.header('Location'));\r",
+							"// pm.test('should have status code 201', () => pm.response.to.have.status(201));\r",
+							"\r",
+							"// pm.environment.set('place_id', pm.response.headers.get('Location'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/places/id/{{place_id}}/dishes/id/{{dish_id}}",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"places",
+						"id",
+						"{{place_id}}",
+						"dishes",
+						"id",
+						"{{dish_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "accessTokenUrl",
+				"value": "https://dishit.auth.us-east-1.amazoncognito.com/oauth2/token",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "https://dishit.auth.us-east-1.amazoncognito.com/oauth2/authorize",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "openid email",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "authorization_code",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "4uv5l3pv6cqqe515btm6bc7emb",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "rtsi0d1u1btc0m4s34sqmv4fn3sul5m3aujn9qq2pb7bsgnd96j",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "auth",
+				"type": "string"
+			},
+			{
+				"key": "challengeAlgorithm",
+				"value": "S256",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "http://localhost:3000",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
